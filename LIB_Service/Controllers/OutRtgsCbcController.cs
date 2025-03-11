@@ -12,6 +12,7 @@ using LIB.API.Application.DTOs.OutRtgsCbc;
 using LIB.API.Application.CQRS.OutRtgsAts.Request.Queries;
 using LIB.API.Application.DTOs.OutRtgsAts.Validators;
 using LIB.API.Application.CQRS.OutRtgsCbc.Request.Queries;
+using LIB.API.Application.DTOs.OutReconciled;
 
 
 namespace LIBPROPERTY_Service.Controllers
@@ -75,6 +76,13 @@ namespace LIBPROPERTY_Service.Controllers
             return NoContent();
         }
 
+        [HttpGet("dateRange")]
+        public async Task<ActionResult<List<OutRtgsCbcDto>>> GetByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            // Call the mediator to get the data within the specified date range
+            var result = await _OutRtgsCbcRepository.GetOutRtgsCbcDByDateIntervalAsync(startDate, endDate);
+            return Ok(result);
+        }
         private int GetTotalPeriods(string timeUnits, string timeQuantity, DateTime startDate, DateTime endDate)
         {
             int totalDays = (endDate - startDate).Days + 1;

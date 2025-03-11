@@ -1,10 +1,12 @@
 ﻿using Dapper;
 using LIB.API.Application.Contracts.Persistence;
+using LIB.API.Application.DTOs.OutRtgsCbc;
 using LIB.API.Domain;
 using LIBPROPERTY.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Oracle.ManagedDataAccess.Client;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace LIB.API.Persistence.Repositories
@@ -41,30 +43,30 @@ namespace LIB.API.Persistence.Repositories
             // Format the next ID with leading zeros
             return nextIdNumber.ToString("D8"); // "D8" means 8 digits with leading zeros
         }
-        /*        public async Task<IEnumerable<OutRtgsCbcs>> GetOutRtgsCbcsByDateAsync(DateTime transactionDate)
+        public async Task<List<OutRtgsCbcDto>> GetOutRtgsCbcDByDateIntervalAsync(DateTime startDate, DateTime endDate)
+        {
+            // Use raw SQL to perform the comparison at the database level
+            string formattedStartDate = startDate.ToString("dd-MMM-yy", CultureInfo.InvariantCulture);
+            string formattedEndDate = endDate.ToString("dd-MMM-yy", CultureInfo.InvariantCulture);
+
+            return await _context.OutRtgsCbcs
+                .FromSqlRaw("SELECT * FROM OutRtgsCbcs WHERE CONVERT(DATE, DATET, 3) >= {0} AND CONVERT(DATE, DATET, 3) <= {1}", formattedStartDate, formattedEndDate)
+                .Select(t => new OutRtgsCbcDto
                 {
-                    var query = @"
-                    SELECT BRANCH, ACCOUNT, REFNO, AMOUNT, INPUTING_BRANCH, DEBITOR_NAME, DESCRIPTION, DATET
-                    FROM anbesaprod.rtgs_txn
-                    WHERE transaction_date = :transactionDate";
+                    REFNO = t.REFNO,
+                    DATET = t.DATET,
+                    INPUTING_BRANCH = t.INPUTING_BRANCH,
+                    AMOUNT = t.AMOUNT,
+                    DISCRIPTION = t.DISCRIPTION,
+                    DEBITOR_NAME = t.DEBITOR_NAME,
+                    ACCOUNT = t.ACCOUNT,
+                    BRANCH = t.BRANCH
+                })
+                .ToListAsync();
+        }
 
-                    using (var connection = new OracleConnection(_connectionString))
-                    {
-                        var transactionDateParameter = new OracleParameter
-                        {
-                            ParameterName = "transactionDate",
-                            OracleDbType = OracleDbType.Date,
-                            Value = transactionDate
-                        };
 
-                        await connection.OpenAsync();
 
-                        return await connection.QueryAsync<OutRtgsCbcs>(
-                            query,
-                            new { transactionDate = transactionDateParameter });
-                    }
-                }
-        */
 
         public async Task<string?> GetLastProcessedDateAsync()
         {

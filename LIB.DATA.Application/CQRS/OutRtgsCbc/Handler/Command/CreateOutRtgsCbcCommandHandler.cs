@@ -124,7 +124,7 @@ namespace LIB.API.Application.CQRS.OutRtgsCbc.Handler.Command
                 // Fetch yesterday's date
 
 
-                var yesterday = DateTime.Now.AddDays(-1).Date;
+                var yesterday = DateTime.Now.AddDays(-6).Date;
                 // Fetch data from the repository
 
                 var formattedYesterday = yesterday.ToString("yyMMdd");

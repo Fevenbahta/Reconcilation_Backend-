@@ -1,6 +1,8 @@
 ﻿
 using AutoMapper;
 using LIB.API.Application.Contracts.Persistence;
+using LIB.API.Application.DTOs.InRtgsCbc;
+using LIB.API.Application.DTOs.OutRtgsCbc;
 using LIB.API.Domain;
 using LIBPROPERTY.Persistence.Repositories;
 using MediatR;
@@ -9,6 +11,7 @@ using Oracle.ManagedDataAccess.Client;
 using Org.BouncyCastle.Asn1.X509;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,6 +48,30 @@ namespace LIB.API.Persistence.Repositories
                
             };
         }
+
+
+
+        public async Task<List<InRtgsCbcDto>> GetInRtgsCbcDByDateIntervalAsync(DateTime startDate, DateTime endDate)
+        {
+           
+            return await _context.InRtgsCbcs
+                .Where(t =>
+               t.TRANSACTION_DATE.Date >= startDate.Date && t.TRANSACTION_DATE.Date <= endDate.Date)
+                         .Select(t => new InRtgsCbcDto
+                {
+                    REFNO = t.REFNO,
+                    TRANSACTION_DATE = t.TRANSACTION_DATE,
+                    INPUTING_BRANCH = t.INPUTING_BRANCH,
+                    AMOUNT = t.AMOUNT,
+                    DISCRIPTION = t.DISCRIPTION,
+                    DEBITOR_NAME = t.DEBITOR_NAME,
+                    ACCOUNT = t.ACCOUNT,
+                    BRANCH = t.BRANCH
+                })
+                .ToListAsync();
+        }
+
+
 
         public async Task<DateTime?> GetLastProcessedDateAsync()
         {

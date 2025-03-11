@@ -12,7 +12,9 @@ namespace LIB.API.Application.Contracts.Persistence
 {
     public interface IInRtgsCbcRepository : IGenericRepository<InRtgsCbcs>
     {
-             Task<InRtgsCbcs> GetInRtgsCbcByReferenceNoAsync(string referenceNo);
+        Task<List<InRtgsCbcDto>> GetInRtgsCbcDByDateIntervalAsync(DateTime startDate, DateTime endDate);
+
+        Task<InRtgsCbcs> GetInRtgsCbcByReferenceNoAsync(string referenceNo);
         Task<DateTime?> GetLastProcessedDateAsync();
     }
 }

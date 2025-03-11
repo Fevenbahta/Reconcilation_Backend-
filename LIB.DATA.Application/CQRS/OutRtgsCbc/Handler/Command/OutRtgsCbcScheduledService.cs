@@ -46,7 +46,7 @@ public class OutRtgsCbcScheduledService : BackgroundService
                 // Ensure properties are set if required
                 OutRtgsCbcDto = new OutRtgsCbcDto
                 {
-                    DESCRIPTION = "",
+                    DISCRIPTION = "",
                     ACCOUNT = "",
                     REFNO = "",
                     DATET = "",

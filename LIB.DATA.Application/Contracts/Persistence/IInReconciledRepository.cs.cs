@@ -1,5 +1,6 @@
 ﻿using LIB.API.Application.Contracts.Persistence;
 using LIB.API.Application.Contracts.Persistent;
+using LIB.API.Application.DTOs.InReconciled;
 using LIB.API.Domain;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,9 @@ namespace LIB.API.Application.Contracts.Persistence
 {
     public interface IInReconciledRepository : IGenericRepository<InReconcileds>
     {
-      
-     
+
+        Task<List<InReconciledDto>> GetInReconciledByDateIntervalAsync(DateTime startDate, DateTime endDate);
+
 
     }
 }

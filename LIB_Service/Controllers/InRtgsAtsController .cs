@@ -15,6 +15,8 @@ using AutoMapper;
 using LIB.API.Application.Contracts.Persistence;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using LIB.API.Application.DTOs.OutReconciled;
+using LIB.API.Persistence.Repositories;
 
 
 namespace LIBPROPERTY_Service.Controllers
@@ -24,10 +26,12 @@ namespace LIBPROPERTY_Service.Controllers
     public class InRtgsAtsController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IInRtgsAtsRepository _inRtgsAtsRepository;
 
-        public InRtgsAtsController(IMediator mediator)
+        public InRtgsAtsController(IMediator mediator,IInRtgsAtsRepository inRtgsAtsRepository)
         {
             _mediator = mediator;
+            _inRtgsAtsRepository = inRtgsAtsRepository;
         }
 
         // GET: api/<InRtgsAtsController>
@@ -75,7 +79,13 @@ namespace LIBPROPERTY_Service.Controllers
             await _mediator.Send(command);
             return NoContent();
         }
-
+        [HttpGet("dateRange")]
+        public async Task<ActionResult<List<InRtgsAtsDto>>> GetByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            // Call the mediator to get the data within the specified date range
+            var result = await _inRtgsAtsRepository.GetInRtgsAtsDByDateIntervalAsync(startDate, endDate);
+            return Ok(result);
+        }
 
 
         // DELETE api/<InRtgsAtsController>/5

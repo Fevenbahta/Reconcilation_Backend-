@@ -55,6 +55,13 @@ namespace LIBPROPERTY_Service.Controllers
 
         }
 
+        [HttpGet("dateRange")]
+        public async Task<ActionResult<List<OutReconciledDto>>> GetByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            // Call the mediator to get the data within the specified date range
+            var result = await _OutReconciledRepository.GetInReconciledByDateIntervalAsync(startDate, endDate);
+            return Ok(result);
+        }
 
         // DELETE api/<OutReconciledController>/5
         [HttpDelete("{id}")]

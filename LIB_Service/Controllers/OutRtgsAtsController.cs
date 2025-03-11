@@ -14,6 +14,8 @@ using LIB.API.Application.CQRS.OutRtgsAts.Request.Command;
 using OfficeOpenXml;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using LIB.API.Application.DTOs.OutReconciled;
+using LIB.API.Persistence.Repositories;
 
 namespace LIBPROPERTY_Service.Controllers
 {
@@ -58,7 +60,13 @@ namespace LIBPROPERTY_Service.Controllers
             return Ok(command);
 
         }
-
+        [HttpGet("dateRange")]
+        public async Task<ActionResult<List<OutRtgsAtsDto>>> GetByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            // Call the mediator to get the data within the specified date range
+            var result = await _OutRtgsAtsRepository.GetOutRtgsAtsDByDateIntervalAsync(startDate, endDate);
+            return Ok(result);
+        }
 
         // DELETE api/<OutRtgsAtsController>/5
         [HttpDelete("{id}")]

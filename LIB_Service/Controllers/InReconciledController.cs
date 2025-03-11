@@ -12,6 +12,8 @@ using LIB.API.Application.CQRS.InReconciled.Request.Queries;
 
 using LIB.API.Application.CQRS.InReconciled.Request.Command;
 using LIB.API.Application.DTOs.InReconciled;
+using LIB.API.Application.DTOs.OutReconciled;
+using LIB.API.Persistence.Repositories;
 
 namespace LIBPROPERTY_Service.Controllers
 {
@@ -53,6 +55,14 @@ namespace LIBPROPERTY_Service.Controllers
             await _mediator.Send(command);
             return Ok(command);
 
+        }
+
+        [HttpGet("dateRange")]
+        public async Task<ActionResult<List<InReconciledDto>>> GetByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            // Call the mediator to get the data within the specified date range
+            var result = await _InReconciledRepository.GetInReconciledByDateIntervalAsync(startDate, endDate);
+            return Ok(result);
         }
 
 

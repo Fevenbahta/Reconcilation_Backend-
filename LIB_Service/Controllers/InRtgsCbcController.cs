@@ -4,6 +4,7 @@ using LIB.API.Application.Contracts.Persistence;
 using LIB.API.Application.CQRS.InRtgsCbc.Request.Command;
 using LIB.API.Application.CQRS.InRtgsCbc.Request.Queries;
 using LIB.API.Application.DTOs.InRtgsCbc;
+using LIB.API.Application.DTOs.OutReconciled;
 using LIB.API.Domain;
 using LIB.API.Persistence;
 using LIB.API.Persistence.Repositories;
@@ -101,62 +102,70 @@ namespace LIBPROPERTY_Service.Controllers
             return NoContent();
         }
 
+
+        [HttpGet("dateRange")]
+        public async Task<ActionResult<List<InRtgsCbcDto>>> GetByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            // Call the mediator to get the data within the specified date range
+            var result = await _InRtgsCbcRepository.GetInRtgsCbcDByDateIntervalAsync(startDate, endDate);
+            return Ok(result);
+        }
         // GET: api/InRtgsCbc/GetUserDetailsByAccountNumber/{accountNumber}
 
 
-/*        [HttpGet("GetUserDetailsByAccountNumber/{accountNumber}")]
-        public async Task<IActionResult> GetUserDetailsByAccountNumber(string accountNumber)
-        {
-            var userDetails = await _InRtgsCbcRepository.GetUserDetailsByAccountNumberAsync(accountNumber);
+        /*        [HttpGet("GetUserDetailsByAccountNumber/{accountNumber}")]
+                public async Task<IActionResult> GetUserDetailsByAccountNumber(string accountNumber)
+                {
+                    var userDetails = await _InRtgsCbcRepository.GetUserDetailsByAccountNumberAsync(accountNumber);
 
 
 
-            return Ok(userDetails);
-        }
-
- 
- */
-/*        [HttpGet("GetUserDetail")]
-        public async Task<IActionResult> GetUserDetails(string branch, string userName, string role)
-        {
-            if (string.IsNullOrEmpty(branch) || string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(role))
-            {
-                return BadRequest("Branch, UserName, and Role are required parameters.");
-            }
-
-            var userDetails = await _InRtgsCbcRepository.GetUserDetailAsync(branch, userName, role);
-
-            if (userDetails == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(userDetails);
-        }
-*/
+                    return Ok(userDetails);
+                }
 
 
-   /*     [HttpGet("GetUserDetailByUserName")]
-        public async Task<IActionResult> GetUserDetailsByUserName(string userName)
-        {
-            if (string.IsNullOrEmpty(userName))
-            {
-                return BadRequest("Branch, UserName, and Role are required parameters.");
-            }
+         */
+        /*        [HttpGet("GetUserDetail")]
+                public async Task<IActionResult> GetUserDetails(string branch, string userName, string role)
+                {
+                    if (string.IsNullOrEmpty(branch) || string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(role))
+                    {
+                        return BadRequest("Branch, UserName, and Role are required parameters.");
+                    }
 
-            var userDetails = await _InRtgsCbcRepository.GetUserDetailAsyncByUserName(userName);
+                    var userDetails = await _InRtgsCbcRepository.GetUserDetailAsync(branch, userName, role);
 
-            if (userDetails == null)
-            {
-                return NotFound();
-            }
+                    if (userDetails == null)
+                    {
+                        return NotFound();
+                    }
 
-            return Ok(userDetails);
-        }
+                    return Ok(userDetails);
+                }
         */
-   
-        
-        
+
+
+        /*     [HttpGet("GetUserDetailByUserName")]
+             public async Task<IActionResult> GetUserDetailsByUserName(string userName)
+             {
+                 if (string.IsNullOrEmpty(userName))
+                 {
+                     return BadRequest("Branch, UserName, and Role are required parameters.");
+                 }
+
+                 var userDetails = await _InRtgsCbcRepository.GetUserDetailAsyncByUserName(userName);
+
+                 if (userDetails == null)
+                 {
+                     return NotFound();
+                 }
+
+                 return Ok(userDetails);
+             }
+             */
+
+
+
         /*
                 [HttpPost("CreateAndApproveInRtgsCbc")]
                 public async Task<IActionResult> CreateAndApproveInRtgsCbc(string mobileNumber, string accountNumber, decimal amount, string memberId)
@@ -201,7 +210,7 @@ namespace LIBPROPERTY_Service.Controllers
         */
 
 
-      
+
 
 
     }
